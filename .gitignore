@@ -1,0 +1,257 @@
+# HR System - İnsan Kaynakları Modülü
+# .gitignore dosyası
+
+# Dependencies
+/vendor/
+/node_modules/
+composer.lock
+package-lock.json
+yarn.lock
+
+# Environment files
+.env
+.env.local
+.env.production
+.env.staging
+.env.test
+.env.example
+
+# Configuration files with sensitive data
+config/database.php
+config/app.php
+config/mail.php
+*.config.php
+
+# Logs
+/logs/
+*.log
+error_log
+access_log
+
+# Cache and temporary files
+/cache/
+/temp/
+/tmp/
+*.tmp
+*.temp
+*.cache
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+*.save
+
+# Database files
+*.sql
+*.sqlite
+*.db
+
+# Upload directories
+/uploads/
+/storage/
+/public/uploads/
+/public/storage/
+
+# Session files
+/sessions/
+*.sess
+
+# Compiled assets
+/public/css/dist/
+/public/js/dist/
+/public/build/
+/public/mix-manifest.json
+
+# Testing
+/coverage/
+/tests/coverage/
+phpunit.xml
+.phpunit.result.cache
+
+# Documentation
+/docs/
+*.md
+!README.md
+
+# Deployment
+/deploy/
+/deployment/
+*.tar.gz
+*.zip
+
+# Local development
+docker-compose.override.yml
+docker-compose.local.yml
+
+# XAMPP specific
+/xampp/
+/htdocs/
+*.ini
+
+# PHP specific
+*.php~
+*.php.bak
+*.php.old
+
+# Apache specific
+.htaccess.bak
+.htaccess.old
+
+# Security
+*.key
+*.pem
+*.crt
+*.p12
+*.pfx
+
+# Backup and archive
+*.tar
+*.gz
+*.zip
+*.rar
+*.7z
+
+# Temporary uploads
+/tmp_uploads/
+/temp_uploads/
+
+# User uploaded content
+/user_uploads/
+/employee_photos/
+/documents/
+
+# Generated reports
+/reports/generated/
+/exports/
+/downloads/
+
+# Cache directories
+/cache/smarty/
+/cache/twig/
+/cache/views/
+
+# Session storage
+/sessions/
+/session/
+
+# Application specific
+/app/storage/
+/storage/logs/
+/storage/framework/
+/storage/app/
+
+# Composer
+composer.phar
+/vendor/
+
+# NPM/Yarn
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backup
+*.bak
+*.backup
+*.old
+
+# Database
+*.sql
+*.sqlite
+*.db
+
+# Uploads
+/uploads/
+/storage/
+/public/uploads/
+
+# Sessions
+/sessions/
+*.sess
+
+# Compiled
+/public/css/dist/
+/public/js/dist/
+/public/build/
+
+# Testing
+/coverage/
+phpunit.xml
+
+# Local
+.env.local
+.env.development
+
+# XAMPP
+/xampp/
+/htdocs/
+
+# Security
+*.key
+*.pem
+*.crt
+
+# Archives
+*.tar
+*.gz
+*.zip
+
+# Temp
+/tmp_uploads/
+/temp_uploads/
+
+# User content
+/user_uploads/
+/employee_photos/
+/documents/
+
+# Reports
+/reports/generated/
+/exports/
+/downloads/
+
+# Cache
+/cache/smarty/
+/cache/twig/
+/cache/views/
+
+# Sessions
+/sessions/
+/session/
+
+# App storage
+/app/storage/
+/storage/logs/
+/storage/framework/
+/storage/app/

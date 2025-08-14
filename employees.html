@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Çalışan Yönetimi - Lokma Tatlı Dünyası</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary-color: #f59e0b;
+            --success-color: #10b981;
+            --info-color: #06b6d4;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --dark-color: #1f2937;
+            --light-color: #f8fafc;
+            --border-radius: 16px;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #374151;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: var(--shadow);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--primary-color) !important;
+        }
+
+        .navbar-brand i {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-link {
+            color: var(--dark-color) !important;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary-color) !important;
+            transform: translateY(-2px);
+        }
+
+        .main-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            margin: 2rem auto;
+            padding: 2rem;
+            max-width: 1400px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: var(--border-radius);
+            color: white;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            border: none;
+            margin-bottom: 2rem;
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 0.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            border-radius: 12px;
+            margin: 0 0.25rem;
+            padding: 1rem 1.5rem;
+            font-weight: 500;
+            color: var(--dark-color);
+            transition: all 0.3s ease;
+        }
+
+        .nav-tabs .nav-link:hover {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary-color);
+        }
+
+        .nav-tabs .nav-link.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            box-shadow: var(--shadow);
+        }
+
+        .tab-content {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .card {
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+        }
+
+        .card-header h6 {
+            font-weight: 600;
+            color: var(--dark-color);
+            margin: 0;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .btn {
+            border-radius: 12px;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            border: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-color), #059669);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, var(--info-color), #0891b2);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, var(--warning-color), #d97706);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger-color), #dc2626);
+        }
+
+        .table {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .table thead th {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: none;
+            font-weight: 600;
+            color: var(--dark-color);
+            padding: 1rem;
+        }
+
+        .table tbody td {
+            padding: 1rem;
+            border: none;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: middle;
+        }
+
+        .table tbody tr:hover {
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .search-section {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-section h5 {
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+        }
+
+        .search-results {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 1rem;
+            box-shadow: var(--shadow);
+        }
+
+        .modal-content {
+            border-radius: var(--border-radius);
+            border: none;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-title {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .btn-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--dark-color);
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+            
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-tabs .nav-link {
+                padding: 0.75rem 1rem;
+                font-size: 0.875rem;
+            }
+        }
+
+        .employee-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-inactive {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="dashboard.html">
+                <i class="fas fa-cake-candles"></i>
+                Lokma Tatlı Dünyası
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="dashboard.html">
+                    <i class="fas fa-home me-1"></i>Ana Sayfa
+                </a>
+                <a class="nav-link active" href="employees.html">
+                    <i class="fas fa-users me-1"></i>Çalışanlar
+                </a>
+                <a class="nav-link" href="leaves.html">
+                    <i class="fas fa-calendar-alt me-1"></i>İzinler
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>👥 Çalışan Yönetimi</h1>
+            <p>Çalışan ekleme, düzenleme ve listeleme işlemleri</p>
+        </div>
+
+        <!-- Tab Navigation -->
+        <ul class="nav nav-tabs" id="employeeTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="add-tab" data-bs-toggle="tab" data-bs-target="#add" type="button" role="tab">
+                    <i class="fas fa-plus me-2"></i>Yeni Çalışan Ekle
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="list-tab" data-bs-toggle="tab" data-bs-target="#list" type="button" role="tab">
+                    <i class="fas fa-list me-2"></i>Çalışan Listesi
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="search-tab" data-bs-toggle="tab" data-bs-target="#search" type="button" role="tab">
+                    <i class="fas fa-search me-2"></i>Çalışan Ara
+                </button>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="employeeTabsContent">
+            <!-- Yeni Çalışan Ekleme Tab -->
+            <div class="tab-pane fade show active" id="add" role="tabpanel">
+                <div class="card">
+                    <div class="card-header">
+                        <h6><i class="fas fa-user-plus me-2"></i>Yeni Çalışan Bilgileri</h6>
+                    </div>
+                    <div class="card-body">
+                        <form id="employeeForm">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="employee_number" class="form-label">Çalışan Numarası *</label>
+                                    <input type="text" class="form-control" id="employee_number" name="employee_number" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="first_name" class="form-label">Ad *</label>
+                                    <input type="text" class="form-control" id="first_name" name="first_name" required>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="last_name" class="form-label">Soyad *</label>
+                                    <input type="text" class="form-control" id="last_name" name="last_name" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">E-posta *</label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="phone" class="form-label">Telefon</label>
+                                    <input type="tel" class="form-control" id="phone" name="phone">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="salary" class="form-label">Maaş (₺)</label>
+                                    <input type="number" class="form-control" id="salary" name="salary" step="0.01">
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="department_id" class="form-label">Departman</label>
+                                    <select class="form-control" id="department_id" name="department_id">
+                                        <option value="">Departman Seçin</option>
+                                        <option value="1">Mutfak</option>
+                                        <option value="2">Servis</option>
+                                        <option value="3">Kasa</option>
+                                        <option value="4">Temizlik</option>
+                                        <option value="5">Bar</option>
+                                        <option value="6">Depo</option>
+                                        <option value="7">Yönetim</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="position_id" class="form-label">Pozisyon</label>
+                                    <select class="form-control" id="position_id" name="position_id">
+                                        <option value="">Pozisyon Seçin</option>
+                                        <option value="1">Baş Usta</option>
+                                        <option value="2">Usta</option>
+                                        <option value="3">Çırak</option>
+                                        <option value="4">Kıdemli Garson</option>
+                                        <option value="5">Garson</option>
+                                        <option value="6">Kasiyer</option>
+                                        <option value="7">Barista</option>
+                                        <option value="8">Temizlik Görevlisi</option>
+                                        <option value="9">Depo Sorumlusu</option>
+                                        <option value="10">Müdür</option>
+                                        <option value="11">Şef</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center mt-4">
+                                <button type="submit" class="btn btn-success btn-lg">
+                                    <i class="fas fa-save me-2"></i>Çalışanı Kaydet
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Çalışan Listesi Tab -->
+            <div class="tab-pane fade" id="list" role="tabpanel">
+                <div class="card">
+                    <div class="card-header">
+                        <h6><i class="fas fa-users me-2"></i>Çalışan Listesi</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Çalışan No</th>
+                                        <th>Ad Soyad</th>
+                                        <th>E-posta</th>
+                                        <th>Departman</th>
+                                        <th>Pozisyon</th>
+                                        <th>Maaş</th>
+                                        <th>İşlemler</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="employeeTableBody">
+                                    <!-- JavaScript ile doldurulacak -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Çalışan Arama Tab -->
+            <div class="tab-pane fade" id="search" role="tabpanel">
+                <div class="search-section">
+                    <h5><i class="fas fa-search me-2"></i>Çalışan Arama</h5>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <input type="text" class="form-control" id="searchName" placeholder="Ad veya soyad ile ara...">
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-control" id="searchDepartment">
+                                <option value="">Tüm Departmanlar</option>
+                                <option value="1">Mutfak</option>
+                                <option value="2">Servis</option>
+                                <option value="3">Kasa</option>
+                                <option value="4">Temizlik</option>
+                                <option value="5">Bar</option>
+                                <option value="6">Depo</option>
+                                <option value="7">Yönetim</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-primary w-100" onclick="searchEmployees()">
+                                <i class="fas fa-search me-2"></i>Ara
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="searchResults" class="search-results" style="display: none;">
+                    <!-- Arama sonuçları burada gösterilecek -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Employee Modal -->
+    <div class="modal fade" id="editEmployeeModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-edit me-2"></i>Çalışan Düzenle
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editEmployeeForm">
+                        <input type="hidden" id="edit_id">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_employee_number" class="form-label">Çalışan Numarası</label>
+                                <input type="text" class="form-control" id="edit_employee_number" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_first_name" class="form-label">Ad</label>
+                                <input type="text" class="form-control" id="edit_first_name" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_last_name" class="form-label">Soyad</label>
+                                <input type="text" class="form-control" id="edit_last_name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_email" class="form-label">E-posta</label>
+                                <input type="email" class="form-control" id="edit_email" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_phone" class="form-label">Telefon</label>
+                                <input type="tel" class="form-control" id="edit_phone">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="edit_salary" class="form-label">Maaş (₺)</label>
+                                <input type="number" class="form-control" id="edit_salary" step="0.01">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                    <button type="button" class="btn btn-primary" onclick="updateEmployee()">
+                        <i class="fas fa-save me-2"></i>Güncelle
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Örnek çalışan verileri (Lokma Tatlı Dünyası için)
+        let employees = [
+            {
+                id: 1,
+                employee_number: 'EMP001',
+                first_name: 'Mehmet',
+                last_name: 'Usta',
+                email: 'mehmet.usta@lokmatatli.com',
+                phone: '555-1234',
+                department: 'Mutfak',
+                position: 'Baş Usta',
+                salary: 9500.00
+            },
+            {
+                id: 2,
+                employee_number: 'EMP002',
+                first_name: 'Fatma',
+                last_name: 'Garson',
+                email: 'fatma.garson@lokmatatli.com',
+                phone: '555-5678',
+                department: 'Servis',
+                position: 'Kıdemli Garson',
+                salary: 7500.00
+            },
+            {
+                id: 3,
+                employee_number: 'EMP003',
+                first_name: 'Ali',
+                last_name: 'Kasiyer',
+                email: 'ali.kasiyer@lokmatatli.com',
+                phone: '555-9012',
+                department: 'Kasa',
+                position: 'Kasiyer',
+                salary: 7000.00
+            },
+            {
+                id: 4,
+                employee_number: 'EMP004',
+                first_name: 'Zeynep',
+                last_name: 'Temizlik',
+                email: 'zeynep.temizlik@lokmatatli.com',
+                phone: '555-3456',
+                department: 'Temizlik',
+                position: 'Temizlik Görevlisi',
+                salary: 6500.00
+            },
+            {
+                id: 5,
+                employee_number: 'EMP005',
+                first_name: 'Can',
+                last_name: 'Barista',
+                email: 'can.barista@lokmatatli.com',
+                phone: '555-7890',
+                department: 'Bar',
+                position: 'Barista',
+                salary: 8000.00
+            }
+        ];
+
+        // Sayfa yüklendiğinde çalışan listesini göster
+        document.addEventListener('DOMContentLoaded', function() {
+            refreshEmployeeList();
+        });
+
+        // Çalışan formu submit
+        document.getElementById('employeeForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            addEmployee();
+        });
+
+        // Yeni çalışan ekle
+        function addEmployee() {
+            const formData = new FormData(document.getElementById('employeeForm'));
+            const employee = {
+                id: employees.length + 1,
+                employee_number: formData.get('employee_number'),
+                first_name: formData.get('first_name'),
+                last_name: formData.get('last_name'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                department: getDepartmentName(formData.get('department_id')),
+                position: getPositionName(formData.get('position_id')),
+                salary: parseFloat(formData.get('salary'))
+            };
+
+            employees.push(employee);
+            document.getElementById('employeeForm').reset();
+            alert('✅ Çalışan başarıyla eklendi!');
+            refreshEmployeeList();
+        }
+
+        // Çalışan listesini yenile
+        function refreshEmployeeList() {
+            const tbody = document.getElementById('employeeTableBody');
+            tbody.innerHTML = '';
+
+            employees.forEach(employee => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${employee.id}</td>
+                    <td><strong>${employee.employee_number}</strong></td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <div class="employee-avatar me-2">
+                                ${employee.first_name.charAt(0)}${employee.last_name.charAt(0)}
+                            </div>
+                            <div>
+                                <div class="fw-bold">${employee.first_name} ${employee.last_name}</div>
+                                <small class="text-muted">${employee.email}</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${employee.email}</td>
+                    <td><span class="badge bg-primary">${employee.department}</span></td>
+                    <td><span class="badge bg-info">${employee.position}</span></td>
+                    <td><strong>${employee.salary.toLocaleString('tr-TR')} ₺</strong></td>
+                    <td>
+                        <button class="btn btn-sm btn-primary me-1" onclick="editEmployee(${employee.id})" title="Düzenle">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteEmployee(${employee.id})" title="Sil">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Çalışan düzenle
+        function editEmployee(id) {
+            const employee = employees.find(emp => emp.id === id);
+            if (employee) {
+                document.getElementById('edit_id').value = employee.id;
+                document.getElementById('edit_employee_number').value = employee.employee_number;
+                document.getElementById('edit_first_name').value = employee.first_name;
+                document.getElementById('edit_last_name').value = employee.last_name;
+                document.getElementById('edit_email').value = employee.email;
+                document.getElementById('edit_phone').value = employee.phone;
+                document.getElementById('edit_salary').value = employee.salary;
+
+                new bootstrap.Modal(document.getElementById('editEmployeeModal')).show();
+            }
+        }
+
+        // Çalışan güncelle
+        function updateEmployee() {
+            const id = parseInt(document.getElementById('edit_id').value);
+            const employee = employees.find(emp => emp.id === id);
+            
+            if (employee) {
+                employee.employee_number = document.getElementById('edit_employee_number').value;
+                employee.first_name = document.getElementById('edit_first_name').value;
+                employee.last_name = document.getElementById('edit_last_name').value;
+                employee.email = document.getElementById('edit_email').value;
+                employee.phone = document.getElementById('edit_phone').value;
+                employee.salary = parseFloat(document.getElementById('edit_salary').value);
+
+                refreshEmployeeList();
+                bootstrap.Modal.getInstance(document.getElementById('editEmployeeModal')).hide();
+                alert('✅ Çalışan başarıyla güncellendi!');
+            }
+        }
+
+        // Çalışan sil
+        function deleteEmployee(id) {
+            if (confirm('⚠️ Bu çalışanı silmek istediğinizden emin misiniz?')) {
+                employees = employees.filter(emp => emp.id !== id);
+                refreshEmployeeList();
+                alert('✅ Çalışan başarıyla silindi!');
+            }
+        }
+
+        // Çalışan ara
+        function searchEmployees() {
+            const searchName = document.getElementById('searchName').value.toLowerCase();
+            const searchDepartment = document.getElementById('searchDepartment').value;
+            
+            let filteredEmployees = employees.filter(employee => {
+                const nameMatch = employee.first_name.toLowerCase().includes(searchName) || 
+                                employee.last_name.toLowerCase().includes(searchName);
+                const departmentMatch = !searchDepartment || employee.department === getDepartmentName(searchDepartment);
+                
+                return nameMatch && departmentMatch;
+            });
+
+            displaySearchResults(filteredEmployees);
+        }
+
+        // Arama sonuçlarını göster
+        function displaySearchResults(results) {
+            const searchResults = document.getElementById('searchResults');
+            
+            if (results.length === 0) {
+                searchResults.innerHTML = '<p class="text-muted text-center">🔍 Arama kriterlerine uygun çalışan bulunamadı.</p>';
+                searchResults.style.display = 'block';
+                return;
+            }
+
+            let html = '<h6 class="mb-3">🔍 Arama Sonuçları (' + results.length + ' çalışan)</h6>';
+            html += '<div class="table-responsive"><table class="table table-hover">';
+            html += '<thead><tr><th>Ad Soyad</th><th>E-posta</th><th>Departman</th><th>Pozisyon</th><th>Maaş</th></tr></thead><tbody>';
+            
+            results.forEach(employee => {
+                html += `<tr>
+                    <td><strong>${employee.first_name} ${employee.last_name}</strong></td>
+                    <td>${employee.email}</td>
+                    <td><span class="badge bg-primary">${employee.department}</span></td>
+                    <td><span class="badge bg-info">${employee.position}</span></td>
+                    <td><strong>${employee.salary.toLocaleString('tr-TR')} ₺</strong></td>
+                </tr>`;
+            });
+            
+            html += '</tbody></table></div>';
+            searchResults.innerHTML = html;
+            searchResults.style.display = 'block';
+        }
+
+        // Departman adını getir
+        function getDepartmentName(id) {
+            const departments = {
+                '1': 'Mutfak',
+                '2': 'Servis',
+                '3': 'Kasa',
+                '4': 'Temizlik',
+                '5': 'Bar',
+                '6': 'Depo',
+                '7': 'Yönetim'
+            };
+            return departments[id] || 'Belirtilmemiş';
+        }
+
+        // Pozisyon adını getir
+        function getPositionName(id) {
+            const positions = {
+                '1': 'Baş Usta',
+                '2': 'Usta',
+                '3': 'Çırak',
+                '4': 'Kıdemli Garson',
+                '5': 'Garson',
+                '6': 'Kasiyer',
+                '7': 'Barista',
+                '8': 'Temizlik Görevlisi',
+                '9': 'Depo Sorumlusu',
+                '10': 'Müdür',
+                '11': 'Şef'
+            };
+            return positions[id] || 'Belirtilmemiş';
+        }
+    </script>
+</body>
+</html>
