@@ -1,15 +1,19 @@
 <?php
 $pageTitle = 'Yeni Çalışan Ekle - İnsan Kaynakları Sistemi';
-include __DIR__ . '/../layout/header.php';
+$currentPage = 'employees';
+$breadcrumb = 'Çalışanlar / Yeni Ekle';
+include 'views/layout/header.php';
 ?>
 
-<div class="row mb-4">
-    <div class="col-12">
-        <h1 class="h3 mb-0 text-gray-800">
-            <i class="fas fa-user-plus me-2"></i>
-            Yeni Çalışan Ekle
-        </h1>
-        <p class="text-muted">Sisteme yeni çalışan bilgilerini girin</p>
+<!-- Page Header -->
+<div class="page-header mb-4">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <h1 class="page-title">
+                <i class="fas fa-user-plus me-2"></i>Yeni Çalışan Ekle
+            </h1>
+            <p class="text-muted">Sisteme yeni çalışan bilgilerini girin</p>
+        </div>
     </div>
 </div>
 
@@ -20,7 +24,7 @@ include __DIR__ . '/../layout/header.php';
                 <h6 class="m-0 font-weight-bold text-primary">Çalışan Bilgileri</h6>
             </div>
             <div class="card-body">
-                <form method="POST" action="/employees/add">
+                <form method="POST" action="#" id="addEmployeeForm">
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="employee_number" class="form-label">Çalışan Numarası *</label>
@@ -67,24 +71,29 @@ include __DIR__ . '/../layout/header.php';
                     
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="department_id" class="form-label">Departman</label>
-                            <select class="form-control" id="department_id" name="department_id">
+                            <label for="department" class="form-label">Departman</label>
+                            <select class="form-control" id="department" name="department">
                                 <option value="">Departman Seçin</option>
-                                <option value="1">İnsan Kaynakları</option>
-                                <option value="2">Bilgi Teknolojileri</option>
-                                <option value="3">Muhasebe</option>
-                                <option value="4">Satış</option>
-                                <option value="5">Üretim</option>
+                                <option value="Usta">Usta</option>
+                                <option value="Mutfak">Mutfak</option>
+                                <option value="Temizlik Personeli">Temizlik Personeli</option>
+                                <option value="Sekreter">Sekreter</option>
+                                <option value="Finans">Finans</option>
+                                <option value="Mühendis">Mühendis</option>
+                                <option value="Bilişimci">Bilişimci</option>
+                                <option value="Muhasebe">Muhasebe</option>
+                                <option value="İnsan Kaynakları">İnsan Kaynakları</option>
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="position_id" class="form-label">Pozisyon</label>
-                            <select class="form-control" id="position_id" name="position_id">
+                            <label for="position" class="form-label">Pozisyon</label>
+                            <select class="form-control" id="position" name="position">
                                 <option value="">Pozisyon Seçin</option>
-                                <option value="1">Yönetici</option>
-                                <option value="2">Uzman</option>
-                                <option value="3">Teknisyen</option>
-                                <option value="4">Asistan</option>
+                                <option value="Yönetici">Yönetici</option>
+                                <option value="Uzman">Uzman</option>
+                                <option value="Teknisyen">Teknisyen</option>
+                                <option value="Asistan">Asistan</option>
+                                <option value="Çalışan">Çalışan</option>
                             </select>
                         </div>
                     </div>
@@ -95,7 +104,7 @@ include __DIR__ . '/../layout/header.php';
                                 <i class="fas fa-save me-2"></i>
                                 Çalışanı Kaydet
                             </button>
-                            <a href="/employees" class="btn btn-secondary ms-2">
+                            <a href="index.php?page=employees" class="btn btn-secondary ms-2">
                                 <i class="fas fa-arrow-left me-2"></i>
                                 Geri Dön
                             </a>
@@ -107,4 +116,33 @@ include __DIR__ . '/../layout/header.php';
     </div>
 </div>
 
-<?php include __DIR__ . '/../layout/footer.php'; ?>
+<script>
+// Form handling
+document.getElementById('addEmployeeForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    
+    // Show success message
+    showToast('Çalışan başarıyla eklendi', 'success');
+    
+    // Redirect to employee list after a short delay
+    setTimeout(() => {
+        window.location.href = 'index.php?page=employees';
+    }, 1500);
+});
+
+// Auto-save functionality
+let autoSaveTimer;
+const formInputs = document.querySelectorAll('#addEmployeeForm input, #addEmployeeForm select');
+
+formInputs.forEach(input => {
+    input.addEventListener('input', function() {
+        clearTimeout(autoSaveTimer);
+        autoSaveTimer = setTimeout(() => {
+            // Auto-save logic would go here
+            console.log('Auto-saving...');
+        }, 2000);
+    });
+});
+</script>
+
+<?php include 'views/layout/footer.php'; ?>

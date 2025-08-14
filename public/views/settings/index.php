@@ -15,6 +15,9 @@ include 'views/layout/header.php';
             <p class="page-subtitle">Sistem yapılandırmasını ve kullanıcı tercihlerini yönetin</p>
         </div>
         <div class="col-md-6 text-end">
+            <button class="btn btn-outline-warning me-2" onclick="resetSettings()">
+                <i class="fas fa-undo me-2"></i>Sıfırla
+            </button>
             <button class="btn btn-primary" onclick="saveAllSettings()">
                 <i class="fas fa-save me-2"></i>Tümünü Kaydet
             </button>
@@ -276,13 +279,174 @@ include 'views/layout/header.php';
 
 <script>
 function saveAllSettings() {
-    // Tüm ayarları kaydet
+    // Tüm ayarları topla
+    const settings = collectAllSettings();
+    
+    // Ayarları localStorage'a kaydet
+    localStorage.setItem('hrSystemSettings', JSON.stringify(settings));
+    
+    // Başarı mesajı göster
     showToast('Ayarlar kaydediliyor...', 'info');
     
     // Simüle edilmiş kaydetme işlemi
     setTimeout(() => {
         showToast('Tüm ayarlar başarıyla kaydedildi!', 'success');
+        
+        // Kaydedilen ayarları göster
+        displaySavedSettings();
     }, 2000);
+}
+
+function collectAllSettings() {
+    const settings = {};
+    
+    // Genel ayarlar
+    settings.general = {
+        systemName: document.getElementById('systemName').value,
+        defaultLanguage: document.getElementById('defaultLanguage').value,
+        timezone: document.getElementById('timezone').value,
+        dateFormat: document.getElementById('dateFormat').value,
+        timeFormat: document.getElementById('timeFormat').value
+    };
+    
+    // Şirket ayarları
+    settings.company = {
+        companyName: document.getElementById('companyName')?.value || 'Firma Adı',
+        address: document.getElementById('companyAddress')?.value || 'Firma Adresi',
+        phone: document.getElementById('companyPhone')?.value || 'Firma Telefonu',
+        email: document.getElementById('companyEmail')?.value || 'firma@email.com',
+        website: document.getElementById('companyWebsite')?.value || 'www.firma.com',
+        taxNumber: document.getElementById('taxNumber')?.value || 'Vergi No'
+    };
+    
+    // İK ayarları
+    settings.hr = {
+        defaultLeaveDays: document.getElementById('defaultLeaveDays')?.value || 20,
+        overtimeRate: document.getElementById('overtimeRate')?.value || 1.5,
+        workingHours: document.getElementById('workingHours')?.value || 8,
+        probationPeriod: document.getElementById('probationPeriod')?.value || 90
+    };
+    
+    // Bildirim ayarları
+    settings.notifications = {
+        newEmployee: document.getElementById('newEmployeeNotification').checked,
+        leaveRequest: document.getElementById('leaveRequestNotification').checked,
+        attendance: document.getElementById('attendanceNotification').checked,
+        payroll: document.getElementById('payrollNotification').checked,
+        emailNotifications: document.getElementById('emailNotifications').checked,
+        smsNotifications: document.getElementById('smsNotifications')?.checked || false
+    };
+    
+    // Güvenlik ayarları
+    settings.security = {
+        minPasswordLength: document.getElementById('minPasswordLength').value,
+        passwordExpiryDays: document.getElementById('passwordExpiryDays').value,
+        maxLoginAttempts: document.getElementById('maxLoginAttempts').value,
+        accountLockoutMinutes: document.getElementById('accountLockoutMinutes').value,
+        twoFactorAuth: document.getElementById('twoFactorAuth').checked,
+        sessionTimeout: document.getElementById('sessionTimeout').checked,
+        ipRestriction: document.getElementById('ipRestriction').checked,
+        auditLog: document.getElementById('auditLog').checked
+    };
+    
+    return settings;
+}
+
+function loadSavedSettings() {
+    const savedSettings = localStorage.getItem('hrSystemSettings');
+    if (savedSettings) {
+        const settings = JSON.parse(savedSettings);
+        applySettingsToForm(settings);
+        showToast('Kaydedilen ayarlar yüklendi', 'info');
+    }
+}
+
+function applySettingsToForm(settings) {
+    // Genel ayarlar
+    if (settings.general) {
+        if (document.getElementById('systemName')) document.getElementById('systemName').value = settings.general.systemName;
+        if (document.getElementById('defaultLanguage')) document.getElementById('defaultLanguage').value = settings.general.defaultLanguage;
+        if (document.getElementById('timezone')) document.getElementById('timezone').value = settings.general.timezone;
+        if (document.getElementById('dateFormat')) document.getElementById('dateFormat').value = settings.general.dateFormat;
+        if (document.getElementById('timeFormat')) document.getElementById('timeFormat').value = settings.general.timeFormat;
+    }
+    
+    // Şirket ayarları
+    if (settings.company) {
+        if (document.getElementById('companyName')) document.getElementById('companyName').value = settings.company.companyName;
+        if (document.getElementById('companyAddress')) document.getElementById('companyAddress').value = settings.company.address;
+        if (document.getElementById('companyPhone')) document.getElementById('companyPhone').value = settings.company.phone;
+        if (document.getElementById('companyEmail')) document.getElementById('companyEmail').value = settings.company.email;
+        if (document.getElementById('companyWebsite')) document.getElementById('companyWebsite').value = settings.company.website;
+        if (document.getElementById('taxNumber')) document.getElementById('taxNumber').value = settings.company.taxNumber;
+    }
+    
+    // İK ayarları
+    if (settings.hr) {
+        if (document.getElementById('defaultLeaveDays')) document.getElementById('defaultLeaveDays').value = settings.hr.defaultLeaveDays;
+        if (document.getElementById('overtimeRate')) document.getElementById('overtimeRate').value = settings.hr.overtimeRate;
+        if (document.getElementById('workingHours')) document.getElementById('workingHours').value = settings.hr.workingHours;
+        if (document.getElementById('probationPeriod')) document.getElementById('probationPeriod').value = settings.hr.probationPeriod;
+    }
+    
+    // Bildirim ayarları
+    if (settings.notifications) {
+        if (document.getElementById('newEmployeeNotification')) document.getElementById('newEmployeeNotification').checked = settings.notifications.newEmployee;
+        if (document.getElementById('leaveRequestNotification')) document.getElementById('leaveRequestNotification').checked = settings.notifications.leaveRequest;
+        if (document.getElementById('attendanceNotification')) document.getElementById('attendanceNotification').checked = settings.notifications.attendance;
+        if (document.getElementById('payrollNotification')) document.getElementById('payrollNotification').checked = settings.notifications.payroll;
+        if (document.getElementById('emailNotifications')) document.getElementById('emailNotifications').checked = settings.notifications.emailNotifications;
+        if (document.getElementById('smsNotifications')) document.getElementById('smsNotifications').checked = settings.notifications.smsNotifications;
+    }
+    
+    // Güvenlik ayarları
+    if (settings.security) {
+        if (document.getElementById('minPasswordLength')) document.getElementById('minPasswordLength').value = settings.security.minPasswordLength;
+        if (document.getElementById('passwordExpiryDays')) document.getElementById('passwordExpiryDays').value = settings.security.passwordExpiryDays;
+        if (document.getElementById('maxLoginAttempts')) document.getElementById('maxLoginAttempts').value = settings.security.maxLoginAttempts;
+        if (document.getElementById('accountLockoutMinutes')) document.getElementById('accountLockoutMinutes').value = settings.security.accountLockoutMinutes;
+        if (document.getElementById('twoFactorAuth')) document.getElementById('twoFactorAuth').checked = settings.security.twoFactorAuth;
+        if (document.getElementById('sessionTimeout')) document.getElementById('sessionTimeout').checked = settings.security.sessionTimeout;
+        if (document.getElementById('ipRestriction')) document.getElementById('ipRestriction').checked = settings.security.ipRestriction;
+        if (document.getElementById('auditLog')) document.getElementById('auditLog').checked = settings.security.auditLog;
+    }
+}
+
+function displaySavedSettings() {
+    const savedSettings = localStorage.getItem('hrSystemSettings');
+    if (savedSettings) {
+        const settings = JSON.parse(savedSettings);
+        console.log('Kaydedilen ayarlar:', settings);
+        
+        // Ayarları konsola yazdır (geliştirici için)
+        const settingsInfo = document.createElement('div');
+        settingsInfo.className = 'alert alert-info mt-3';
+        settingsInfo.innerHTML = `
+            <h6>Kaydedilen Ayarlar:</h6>
+            <ul class="mb-0">
+                <li>Sistem Adı: ${settings.general?.systemName || 'N/A'}</li>
+                <li>Varsayılan Dil: ${settings.general?.defaultLanguage || 'N/A'}</li>
+                <li>Zaman Dilimi: ${settings.general?.timezone || 'N/A'}</li>
+                <li>Bildirimler: ${settings.notifications?.newEmployee ? 'Açık' : 'Kapalı'}</li>
+                <li>Güvenlik: ${settings.security?.twoFactorAuth ? '2FA Açık' : '2FA Kapalı'}</li>
+            </ul>
+        `;
+        
+        // Mevcut bilgi mesajını kaldır
+        const existingInfo = document.querySelector('.alert-info');
+        if (existingInfo) existingInfo.remove();
+        
+        // Yeni bilgi mesajını ekle
+        document.querySelector('.card-body').appendChild(settingsInfo);
+    }
+}
+
+function resetSettings() {
+    if (confirm('Tüm ayarları sıfırlamak istediğinizden emin misiniz?')) {
+        localStorage.removeItem('hrSystemSettings');
+        location.reload();
+        showToast('Ayarlar sıfırlandı', 'warning');
+    }
 }
 
 // Tab değişikliklerinde otomatik kaydetme
@@ -293,12 +457,20 @@ document.querySelectorAll('#settingsTabs button[data-bs-toggle="tab"]').forEach(
     });
 });
 
-// Form değişikliklerini izle
+// Form değişikliklerini izle ve otomatik kaydet
 document.querySelectorAll('input, select, textarea').forEach(input => {
     input.addEventListener('change', function() {
-        // Değişiklik olduğunda otomatik kaydetme seçeneği
+        // Değişiklik olduğunda otomatik kaydetme
         console.log('Ayar değişti:', this.id, this.value);
+        
+        // Otomatik kaydetme seçeneği (isteğe bağlı)
+        // autoSaveSettings();
     });
+});
+
+// Sayfa yüklendiğinde kaydedilen ayarları yükle
+document.addEventListener('DOMContentLoaded', function() {
+    loadSavedSettings();
 });
 </script>
 

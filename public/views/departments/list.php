@@ -514,30 +514,28 @@ include 'views/layout/header.php';
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form class="needs-validation" novalidate>
+            <form id="addDepartmentForm" class="needs-validation" novalidate>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label">Departman Adı</label>
+                        <label class="form-label">Departman Adı *</label>
                         <input type="text" class="form-control" name="name" required>
                         <div class="invalid-feedback">Departman adı gereklidir.</div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Departman Kodu</label>
+                        <label class="form-label">Departman Kodu *</label>
                         <input type="text" class="form-control" name="code" required>
                         <div class="invalid-feedback">Departman kodu gereklidir.</div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Açıklama</label>
-                        <textarea class="form-control" name="description" rows="3"></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Bütçe</label>
-                        <input type="number" class="form-control" name="budget" min="0" step="1000">
+                        <textarea class="form-control" name="description" rows="3" placeholder="Departman hakkında açıklama..."></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
-                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Kaydet
+                    </button>
                 </div>
             </form>
         </div>
@@ -718,6 +716,38 @@ document.addEventListener('DOMContentLoaded', function() {
         row.setAttribute('data-department-id', index + 1);
     });
     
+    // Department form submission
+    const addDepartmentForm = document.getElementById('addDepartmentForm');
+    if (addDepartmentForm) {
+        addDepartmentForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            if (this.checkValidity()) {
+                // Get form data
+                const formData = new FormData(this);
+                const departmentData = {
+                    name: formData.get('name'),
+                    code: formData.get('code'),
+                    description: formData.get('description')
+                };
+                
+                // Show success message
+                showToast('Departman başarıyla eklendi', 'success');
+                
+                // Add new department to the table
+                addDepartmentToTable(departmentData);
+                
+                // Close modal and reset form
+                const modal = bootstrap.Modal.getInstance(document.getElementById('addDepartmentModal'));
+                modal.hide();
+                this.reset();
+                this.classList.remove('was-validated');
+            } else {
+                this.classList.add('was-validated');
+            }
+        });
+    }
+    
     // Form validation
     const forms = document.querySelectorAll('.needs-validation');
     forms.forEach(form => {
@@ -725,17 +755,68 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!form.checkValidity()) {
                 event.preventDefault();
                 event.stopPropagation();
-            } else {
-                event.preventDefault();
-                showToast('Departman başarıyla eklendi', 'success');
-                const modal = bootstrap.Modal.getInstance(document.getElementById('addDepartmentModal'));
-                modal.hide();
-                form.reset();
             }
             form.classList.add('was-validated');
         });
     });
 });
+
+// Function to add new department to table
+function addDepartmentToTable(departmentData) {
+    const tableBody = document.querySelector('#departmentsTable tbody');
+    if (!tableBody) return;
+    
+    const newRow = document.createElement('tr');
+    newRow.setAttribute('data-department-id', Date.now());
+    
+    newRow.innerHTML = `
+        <td>
+            <div class="department-info">
+                <div class="department-icon">
+                    <i class="fas fa-building"></i>
+                </div>
+                <div>
+                    <div class="department-name">${departmentData.name}</div>
+                    <div class="department-code">${departmentData.code}</div>
+                </div>
+            </div>
+        </td>
+        <td>-</td>
+        <td>0</td>
+        <td>-</td>
+        <td><span class="status-badge active">Aktif</span></td>
+        <td>${new Date().toLocaleDateString('tr-TR')}</td>
+        <td>
+            <div class="action-buttons">
+                <button class="btn btn-sm btn-outline-primary" onclick="viewDepartment(${Date.now()})" title="Görüntüle">
+                    <i class="fas fa-eye"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-warning" onclick="editDepartment(${Date.now()})" title="Düzenle">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" onclick="deleteDepartment(${Date.now()}, '${departmentData.name}')" title="Sil">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </td>
+    `;
+    
+    tableBody.appendChild(newRow);
+    
+    // Update department count
+    updateDepartmentCount();
+}
+
+// Function to update department count
+function updateDepartmentCount() {
+    const totalDepartments = document.querySelectorAll('#departmentsTable tbody tr').length;
+    const totalManagers = document.querySelectorAll('#departmentsTable tbody tr').length;
+    
+    // Update statistics
+    const statNumbers = document.querySelectorAll('.stat-number');
+    if (statNumbers[0]) statNumbers[0].textContent = totalDepartments;
+    if (statNumbers[2]) statNumbers[2].textContent = totalManagers;
+}
 </script>
 
 <?php include 'views/layout/footer.php'; ?>

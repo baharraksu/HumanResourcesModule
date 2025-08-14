@@ -7,17 +7,49 @@ document.addEventListener('DOMContentLoaded', function() {
     const sidebarToggle = document.getElementById('sidebarToggle');
     const menuToggle = document.getElementById('menuToggle');
     
+    console.log('Sidebar elements found:', {
+        sidebar: !!sidebar,
+        mainContent: !!mainContent,
+        sidebarToggle: !!sidebarToggle,
+        menuToggle: !!menuToggle
+    });
+    
     if (sidebarToggle) {
         sidebarToggle.addEventListener('click', function() {
+            console.log('Sidebar toggle clicked');
             sidebar.classList.toggle('collapsed');
             mainContent.classList.toggle('expanded');
+            
+            // Store sidebar state in localStorage
+            localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+            console.log('Sidebar collapsed:', sidebar.classList.contains('collapsed'));
         });
     }
     
     if (menuToggle) {
         menuToggle.addEventListener('click', function() {
+            console.log('Menu toggle clicked');
+            console.log('Current sidebar classes:', sidebar.className);
+            
+            // If sidebar is collapsed, expand it first
+            if (sidebar.classList.contains('collapsed')) {
+                console.log('Expanding collapsed sidebar');
+                sidebar.classList.remove('collapsed');
+                mainContent.classList.remove('expanded');
+                localStorage.setItem('sidebarCollapsed', false);
+            }
+            
+            // Toggle mobile show state
             sidebar.classList.toggle('show');
+            console.log('Sidebar show state:', sidebar.classList.contains('show'));
         });
+    }
+    
+    // Restore sidebar state from localStorage
+    if (localStorage.getItem('sidebarCollapsed') === 'true') {
+        sidebar.classList.add('collapsed');
+        mainContent.classList.add('expanded');
+        console.log('Restored collapsed state from localStorage');
     }
     
     // Notification System
@@ -50,6 +82,67 @@ document.addEventListener('DOMContentLoaded', function() {
         if (window.innerWidth <= 1024 && sidebar && !sidebar.contains(event.target) && 
             !menuToggle.contains(event.target)) {
             sidebar.classList.remove('show');
+        }
+    });
+    
+    // Handle window resize
+    window.addEventListener('resize', function() {
+        console.log('Window resized to:', window.innerWidth);
+        if (window.innerWidth > 1024) {
+            // On desktop, remove mobile show class
+            sidebar.classList.remove('show');
+        } else {
+            // On mobile, if sidebar was collapsed, expand it
+            if (sidebar.classList.contains('collapsed')) {
+                sidebar.classList.remove('collapsed');
+                mainContent.classList.remove('expanded');
+                localStorage.setItem('sidebarCollapsed', false);
+                console.log('Expanded sidebar on mobile resize');
+            }
+        }
+    });
+    
+    // Double click on sidebar to expand if collapsed
+    if (sidebar) {
+        sidebar.addEventListener('dblclick', function() {
+            if (sidebar.classList.contains('collapsed')) {
+                sidebar.classList.remove('collapsed');
+                mainContent.classList.remove('expanded');
+                localStorage.setItem('sidebarCollapsed', false);
+                console.log('Expanded sidebar on double click');
+            }
+        });
+    }
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            // Close mobile sidebar
+            if (window.innerWidth <= 1024 && sidebar.classList.contains('show')) {
+                sidebar.classList.remove('show');
+                console.log('Closed mobile sidebar with Escape key');
+            }
+            // Close notification panel
+            if (notificationPanel && notificationPanel.classList.contains('show')) {
+                notificationPanel.classList.remove('show');
+                console.log('Closed notification panel with Escape key');
+            }
+        }
+        
+        // Ctrl/Cmd + B to toggle sidebar
+        if ((event.ctrlKey || event.metaKey) && event.key === 'b') {
+            event.preventDefault();
+            if (sidebar.classList.contains('collapsed')) {
+                sidebar.classList.remove('collapsed');
+                mainContent.classList.remove('expanded');
+                localStorage.setItem('sidebarCollapsed', false);
+                console.log('Expanded sidebar with Ctrl/Cmd + B');
+            } else {
+                sidebar.classList.add('collapsed');
+                mainContent.classList.add('expanded');
+                localStorage.setItem('sidebarCollapsed', true);
+                console.log('Collapsed sidebar with Ctrl/Cmd + B');
+            }
         }
     });
     
@@ -527,7 +620,7 @@ function printElement(elementId) {
         <html>
             <head>
                 <title>Yazdır</title>
-                <link href="/css/style.css" rel="stylesheet">
+                <link href="css/style.css" rel="stylesheet">
                 <style>
                     @media print {
                         .no-print { display: none !important; }

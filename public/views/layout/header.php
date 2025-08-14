@@ -22,7 +22,7 @@
                 <i class="fas fa-users-cog"></i>
                 <span>İK Sistemi</span>
             </div>
-            <button class="sidebar-toggle" id="sidebarToggle">
+            <button class="sidebar-toggle" id="sidebarToggle" title="Kenar çubuğunu daralt/genişlet (Ctrl+B)">
                 <i class="fas fa-bars"></i>
             </button>
         </div>

@@ -142,7 +142,7 @@ include __DIR__ . '/layout/header.php';
                 <?php endif; ?>
                 
                 <div class="text-center mt-3">
-                    <a href="/employees" class="btn btn-primary btn-sm">
+                    <a href="index.php?page=employees" class="btn btn-primary btn-sm">
                         <i class="fas fa-arrow-right me-1"></i>
                         Tüm Çalışanları Gör
                     </a>
@@ -162,25 +162,25 @@ include __DIR__ . '/layout/header.php';
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-3 mb-3">
-                        <a href="/employees/add" class="btn btn-success w-100">
+                        <a href="index.php?page=employees-add" class="btn btn-success w-100">
                             <i class="fas fa-plus me-2"></i>
                             Yeni Çalışan Ekle
                         </a>
                     </div>
                     <div class="col-md-3 mb-3">
-                        <a href="/leave-requests" class="btn btn-info w-100">
+                        <a href="index.php?page=leave-requests" class="btn btn-info w-100">
                             <i class="fas fa-calendar-plus me-2"></i>
                             İzin Talebi Oluştur
                         </a>
                     </div>
                     <div class="col-md-3 mb-3">
-                        <a href="/reports" class="btn btn-warning w-100">
+                        <a href="index.php?page=reports" class="btn btn-warning w-100">
                             <i class="fas fa-chart-line me-2"></i>
                             Rapor Oluştur
                         </a>
                     </div>
                     <div class="col-md-3 mb-3">
-                        <a href="/departments" class="btn btn-secondary w-100">
+                        <a href="index.php?page=departments" class="btn btn-secondary w-100">
                             <i class="fas fa-cogs me-2"></i>
                             Departman Yönetimi
                         </a>
@@ -223,4 +223,4 @@ const departmentChart = new Chart(ctx, {
 });
 </script>
 
-<?php include __DIR__ . '/layout/footer.php'; ?>
+<?php include 'views/layout/footer.php'; ?>

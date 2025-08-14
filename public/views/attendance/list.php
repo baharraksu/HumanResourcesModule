@@ -297,6 +297,132 @@ include 'views/layout/header.php';
     </div>
 </div>
 
+<!-- Attendance Details Modal -->
+<div class="modal fade" id="attendanceDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Devam Detayları</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold text-muted">Çalışan</label>
+                        <p class="form-control-plaintext" id="detailEmployeeName">-</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold text-muted">Departman</label>
+                        <p class="form-control-plaintext" id="detailDepartment">-</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold text-muted">Tarih</label>
+                        <p class="form-control-plaintext" id="detailDate">-</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold text-muted">Durum</label>
+                        <p class="form-control-plaintext" id="detailStatus">-</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold text-muted">Giriş Saati</label>
+                        <p class="form-control-plaintext" id="detailCheckIn">-</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold text-muted">Çıkış Saati</label>
+                        <p class="form-control-plaintext" id="detailCheckOut">-</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold text-muted">Toplam Saat</label>
+                        <p class="form-control-plaintext" id="detailTotalHours">-</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold text-muted">Mesai</label>
+                        <p class="form-control-plaintext" id="detailOvertime">-</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label class="form-label fw-bold text-muted">Notlar</label>
+                        <p class="form-control-plaintext" id="detailNotes">-</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="editAttendance(1)">Düzenle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Attendance Modal -->
+<div class="modal fade" id="editAttendanceModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Devam Kaydı Düzenle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editAttendanceForm">
+                    <input type="hidden" id="editAttendanceId" name="id">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Çalışan</label>
+                            <select class="form-select" id="editEmployeeId" name="employee_id" required>
+                                <option value="">Seçiniz</option>
+                                <option value="1">Ahmet Yılmaz - Mutfak</option>
+                                <option value="2">Fatma Demir - Servis</option>
+                                <option value="3">Mehmet Kaya - Muhasebe</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Tarih</label>
+                            <input type="date" class="form-control" id="editDate" name="date" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Giriş Saati</label>
+                            <input type="time" class="form-control" id="editCheckIn" name="check_in" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Çıkış Saati</label>
+                            <input type="time" class="form-control" id="editCheckOut" name="check_out">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Durum</label>
+                            <select class="form-select" id="editStatus" name="status" required>
+                                <option value="">Seçiniz</option>
+                                <option value="Geldi">Geldi</option>
+                                <option value="Gelmedi">Gelmedi</option>
+                                <option value="İzinli">İzinli</option>
+                                <option value="Hastalık">Hastalık</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Not</label>
+                            <input type="text" class="form-control" id="editNotes" name="notes" placeholder="Açıklama...">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">İptal</button>
+                <button type="submit" form="editAttendanceForm" class="btn btn-primary">Güncelle</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
 .employee-info {
     display: flex;
@@ -333,20 +459,164 @@ include 'views/layout/header.php';
 
 <script>
 function viewAttendanceDetails(id) {
-    showToast('Devam detayları yükleniyor...', 'info');
+    // Devam detayları modal'ını göster
+    const modal = new bootstrap.Modal(document.getElementById('attendanceDetailsModal'));
+    
+    // Örnek veri (gerçek uygulamada API'den gelecek)
+    const attendanceData = {
+        id: id,
+        employee_name: 'Ahmet Yılmaz',
+        department: 'Mutfak',
+        date: '2024-01-20',
+        check_in: '08:30',
+        check_out: '17:30',
+        status: 'Geldi',
+        total_hours: '8.5',
+        overtime: '0.5',
+        notes: 'Normal mesai'
+    };
+    
+    // Modal içeriğini doldur
+    document.getElementById('detailEmployeeName').textContent = attendanceData.employee_name;
+    document.getElementById('detailDepartment').textContent = attendanceData.department;
+    document.getElementById('detailDate').textContent = attendanceData.date;
+    document.getElementById('detailCheckIn').textContent = attendanceData.check_in;
+    document.getElementById('detailCheckOut').textContent = attendanceData.check_out;
+    document.getElementById('detailStatus').textContent = attendanceData.status;
+    document.getElementById('detailTotalHours').textContent = attendanceData.total_hours;
+    document.getElementById('detailOvertime').textContent = attendanceData.overtime;
+    document.getElementById('detailNotes').textContent = attendanceData.notes;
+    
+    modal.show();
 }
 
 function editAttendance(id) {
-    showToast('Devam kaydı düzenleniyor...', 'info');
+    // Düzenleme modal'ını göster
+    const modal = new bootstrap.Modal(document.getElementById('editAttendanceModal'));
+    
+    // Örnek veri (gerçek uygulamada API'den gelecek)
+    const attendanceData = {
+        id: id,
+        employee_id: '1',
+        date: '2024-01-20',
+        check_in: '08:30',
+        check_out: '17:30',
+        status: 'Geldi',
+        notes: 'Normal mesai'
+    };
+    
+    // Form alanlarını doldur
+    document.getElementById('editEmployeeId').value = attendanceData.employee_id;
+    document.getElementById('editDate').value = attendanceData.date;
+    document.getElementById('editCheckIn').value = attendanceData.check_in;
+    document.getElementById('editCheckOut').value = attendanceData.check_out;
+    document.getElementById('editStatus').value = attendanceData.status;
+    document.getElementById('editNotes').value = attendanceData.notes;
+    
+    modal.show();
 }
 
 function applyAttendanceFilters() {
+    const date = document.getElementById('attendanceDate').value;
+    const department = document.getElementById('departmentFilter').value;
+    const status = document.getElementById('statusFilter').value;
+    
+    if (!date && !department && !status) {
+        showToast('Lütfen en az bir filtre seçin', 'warning');
+        return;
+    }
+    
+    // Filtreleri uygula
+    const table = document.getElementById('attendanceTable');
+    const rows = table.querySelectorAll('tbody tr');
+    
+    rows.forEach(row => {
+        let showRow = true;
+        
+        if (date) {
+            const rowDate = row.querySelector('.attendance-date').textContent;
+            if (rowDate !== date) showRow = false;
+        }
+        
+        if (department) {
+            const rowDept = row.querySelector('.attendance-department').textContent;
+            if (rowDept !== department) showRow = false;
+        }
+        
+        if (status) {
+            const rowStatus = row.querySelector('.attendance-status').textContent;
+            if (rowStatus !== status) showRow = false;
+        }
+        
+        row.style.display = showRow ? '' : 'none';
+    });
+    
     showToast('Filtreler uygulandı', 'success');
 }
 
 function exportAttendance() {
-    showToast('Rapor indiriliyor...', 'info');
+    const date = document.getElementById('attendanceDate').value;
+    const department = document.getElementById('departmentFilter').value;
+    
+    // Excel/CSV export simülasyonu
+    showToast('Devam takibi raporu hazırlanıyor...', 'info');
+    
+    setTimeout(() => {
+        // Gerçek uygulamada burada dosya indirme işlemi yapılır
+        const link = document.createElement('a');
+        link.href = 'data:text/csv;charset=utf-8,Employee,Department,Date,Check In,Check Out,Status\nAhmet Yılmaz,Mutfak,2024-01-20,08:30,17:30,Geldi\nFatma Demir,Servis,2024-01-20,08:15,17:15,Geldi';
+        link.download = `devam_takibi_${date || 'tum'}_${department || 'tum'}.csv`;
+        link.click();
+        
+        showToast('Rapor başarıyla indirildi', 'success');
+    }, 2000);
 }
+
+// Form submit handler
+document.getElementById('attendanceForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    
+    // Form verilerini al
+    const formData = new FormData(this);
+    
+    // Başarı mesajı göster
+    showToast('Devam kaydı başarıyla eklendi', 'success');
+    
+    // Modal'ı kapat
+    const modal = bootstrap.Modal.getInstance(document.getElementById('addAttendanceModal'));
+    modal.hide();
+    
+    // Formu temizle
+    this.reset();
+    
+    // Sayfayı yenile (gerçek uygulamada tablo güncellenir)
+    setTimeout(() => {
+        location.reload();
+    }, 1500);
+});
+
+// Edit form submit handler
+document.getElementById('editAttendanceForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    
+    // Form verilerini al
+    const formData = new FormData(this);
+    
+    // Başarı mesajı göster
+    showToast('Devam kaydı başarıyla güncellendi', 'success');
+    
+    // Modal'ı kapat
+    const modal = bootstrap.Modal.getInstance(document.getElementById('editAttendanceModal'));
+    modal.hide();
+    
+    // Formu temizle
+    this.reset();
+    
+    // Sayfayı yenile (gerçek uygulamada tablo güncellenir)
+    setTimeout(() => {
+        location.reload();
+    }, 1500);
+});
 </script>
 
 <?php include 'views/layout/footer.php'; ?>

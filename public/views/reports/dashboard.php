@@ -246,6 +246,85 @@ include 'views/layout/header.php';
     </div>
 </div>
 
+<!-- New Reports List -->
+<div class="card">
+    <div class="card-header">
+        <h5><i class="fas fa-list me-2"></i>Yeni Oluşturulan Raporlar</h5>
+    </div>
+    <div class="card-body">
+        <div id="reportsList">
+            <!-- New reports will be added here dynamically -->
+            <div class="text-center text-muted py-4">
+                <i class="fas fa-file-alt fa-3x mb-3"></i>
+                <p>Henüz rapor oluşturulmadı</p>
+                <p class="small">Rapor oluşturmak için yukarıdaki butonları kullanın</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Report Details Modal -->
+<div class="modal fade" id="reportDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Rapor Detayları</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold text-muted">Rapor Adı</label>
+                        <p class="form-control-plaintext" id="reportDetailName">-</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold text-muted">Rapor Türü</label>
+                        <p class="form-control-plaintext" id="reportDetailType">-</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold text-muted">Oluşturulma Tarihi</label>
+                        <p class="form-control-plaintext" id="reportDetailDate">-</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold text-muted">Durum</label>
+                        <p class="form-control-plaintext" id="reportDetailStatus">-</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <label class="form-label fw-bold text-muted">Açıklama</label>
+                        <p class="form-control-plaintext" id="reportDetailDescription">-</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label fw-bold text-muted">Toplam Çalışan</label>
+                        <p class="form-control-plaintext" id="reportDetailEmployees">-</p>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label fw-bold text-muted">Aktif Çalışan</label>
+                        <p class="form-control-plaintext" id="reportDetailActive">-</p>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label fw-bold text-muted">Departman</label>
+                        <p class="form-control-plaintext" id="reportDetailDepartments">-</p>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <label class="form-label fw-bold text-muted">Ort. Performans</label>
+                        <p class="form-control-plaintext" id="reportDetailPerformance">-</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" onclick="downloadReport(1)">İndir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <style>
 .report-category {
     display: flex;
@@ -356,20 +435,294 @@ new Chart(departmentCtx, {
     }
 });
 
-function generateReport(type) {
-    showToast(`${type} raporu oluşturuluyor...`, 'info');
+function generateReport(type = 'general') {
+    // Rapor türüne göre Türkçe isim belirle
+    const reportNames = {
+        'general': 'Genel Rapor',
+        'new-hires': 'Yeni İşe Alımlar Raporu',
+        'turnover': 'İşten Ayrılanlar Raporu',
+        'training': 'Eğitim ve Gelişim Raporu',
+        'attendance': 'Devam Takibi Raporu',
+        'leave-analysis': 'İzin Analizi Raporu',
+        'salary-analysis': 'Maaş Analizi Raporu',
+        'performance': 'Performans Raporu',
+        'financial': 'Finansal Rapor',
+        'employee': 'Çalışan Raporu'
+    };
+    
+    const reportName = reportNames[type] || `${type.charAt(0).toUpperCase() + type.slice(1)} Raporu`;
+    
+    showToast(`${reportName} oluşturuluyor...`, 'info');
+    
+    // Rapor oluşturma simülasyonu
+    setTimeout(() => {
+        const reportId = Date.now();
+        const reportData = {
+            id: reportId,
+            type: type,
+            name: reportName,
+            date: new Date().toLocaleDateString('tr-TR'),
+            status: 'Tamamlandı'
+        };
+        
+        // Yeni raporu listeye ekle
+        addReportToList(reportData);
+        
+        // Son oluşturulan raporlar tablosuna da ekle
+        addReportToRecentTable(reportData);
+        
+        showToast(`${reportName} başarıyla oluşturuldu`, 'success');
+    }, 2000);
 }
 
 function downloadReport(id) {
-    showToast('Rapor indiriliyor...', 'success');
+    showToast('Rapor indiriliyor...', 'info');
+    
+    // Rapor indirme simülasyonu
+    setTimeout(() => {
+        const link = document.createElement('a');
+        
+        // Rapor türüne göre dosya adı oluştur
+        const reportTypes = {
+            'new-hires': 'Yeni_Ise_Alimlar',
+            'turnover': 'Isten_Ayrilanlar',
+            'training': 'Egitim_ve_Gelisim',
+            'attendance': 'Devam_Takibi',
+            'leave-analysis': 'Izin_Analizi',
+            'salary-analysis': 'Maas_Analizi',
+            'performance': 'Performans',
+            'financial': 'Finansal',
+            'employee': 'Calisan',
+            'general': 'Genel'
+        };
+        
+        const reportType = reportTypes[id] || 'Rapor';
+        const fileName = `${reportType}_Raporu_${new Date().toLocaleDateString('tr-TR').replace(/\./g, '-')}.csv`;
+        
+        link.href = 'data:text/csv;charset=utf-8,Report ID,Type,Name,Date,Status\n' + 
+                    `${id},${reportType},${reportType} Raporu,${new Date().toLocaleDateString('tr-TR')},Tamamlandı`;
+        link.download = fileName;
+        link.click();
+        
+        showToast('Rapor başarıyla indirildi', 'success');
+    }, 1500);
 }
 
 function viewReport(id) {
-    showToast('Rapor görüntüleniyor...', 'info');
+    // Rapor detayları modal'ını göster
+    const modal = new bootstrap.Modal(document.getElementById('reportDetailsModal'));
+    
+    // Rapor türüne göre açıklama ve metrikler belirle
+    const reportDetails = {
+        'new-hires': {
+            name: 'Yeni İşe Alımlar Raporu',
+            type: 'İşe Alım',
+            description: 'Bu rapor yeni işe alınan çalışanların detaylı analizini ve işe alım trendlerini içerir.',
+            metrics: {
+                total_employees: 156,
+                active_employees: 142,
+                departments: 9,
+                avg_performance: 89
+            }
+        },
+        'turnover': {
+            name: 'İşten Ayrılanlar Raporu',
+            type: 'İşten Ayrılma',
+            description: 'Bu rapor işten ayrılan çalışanların nedenlerini ve işten ayrılma oranlarını analiz eder.',
+            metrics: {
+                total_employees: 156,
+                active_employees: 142,
+                departments: 9,
+                avg_performance: 89
+            }
+        },
+        'training': {
+            name: 'Eğitim ve Gelişim Raporu',
+            type: 'Eğitim',
+            description: 'Bu rapor çalışan eğitim programlarını, gelişim hedeflerini ve eğitim etkinliğini değerlendirir.',
+            metrics: {
+                total_employees: 156,
+                active_employees: 142,
+                departments: 9,
+                avg_performance: 89
+            }
+        },
+        'attendance': {
+            name: 'Devam Takibi Raporu',
+            type: 'Devam Takibi',
+            description: 'Bu rapor çalışanların giriş-çıkış saatlerini, devam oranlarını ve mesai durumlarını analiz eder.',
+            metrics: {
+                total_employees: 156,
+                active_employees: 142,
+                departments: 9,
+                avg_performance: 89
+            }
+        },
+        'leave-analysis': {
+            name: 'İzin Analizi Raporu',
+            type: 'İzin Analizi',
+            description: 'Bu rapor izin türlerini, kullanım oranlarını ve izin planlamasını değerlendirir.',
+            metrics: {
+                total_employees: 156,
+                active_employees: 142,
+                departments: 9,
+                avg_performance: 89
+            }
+        },
+        'salary-analysis': {
+            name: 'Maaş Analizi Raporu',
+            type: 'Maaş Analizi',
+            description: 'Bu rapor departman bazında maaş dağılımını, maaş trendlerini ve adalet analizini içerir.',
+            metrics: {
+                total_employees: 156,
+                active_employees: 142,
+                departments: 9,
+                avg_performance: 89
+            }
+        },
+        'general': {
+            name: 'Genel Rapor',
+            type: 'Genel',
+            description: 'Bu rapor genel sistem durumunu ve performans metriklerini içerir.',
+            metrics: {
+                total_employees: 156,
+                active_employees: 142,
+                departments: 9,
+                avg_performance: 89
+            }
+        }
+    };
+    
+    // Rapor verisini al (gerçek uygulamada API'den gelecek)
+    const reportData = reportDetails['general'] || reportDetails['general']; // Varsayılan olarak genel rapor
+    
+    // Modal içeriğini doldur
+    document.getElementById('reportDetailName').textContent = reportData.name;
+    document.getElementById('reportDetailType').textContent = reportData.type;
+    document.getElementById('reportDetailDate').textContent = new Date().toLocaleDateString('tr-TR');
+    document.getElementById('reportDetailStatus').textContent = 'Tamamlandı';
+    document.getElementById('reportDetailDescription').textContent = reportData.description;
+    document.getElementById('reportDetailEmployees').textContent = reportData.metrics.total_employees;
+    document.getElementById('reportDetailActive').textContent = reportData.metrics.active_employees;
+    document.getElementById('reportDetailDepartments').textContent = reportData.metrics.departments;
+    document.getElementById('reportDetailPerformance').textContent = reportData.metrics.avg_performance;
+    
+    modal.show();
 }
 
 function exportAllReports() {
-    showToast('Tüm raporlar indiriliyor...', 'info');
+    showToast('Tüm raporlar hazırlanıyor...', 'info');
+    
+    // Toplu export simülasyonu
+    setTimeout(() => {
+        const link = document.createElement('a');
+        link.href = 'data:text/csv;charset=utf-8,Report ID,Type,Name,Date,Status\n' +
+                    '1,General,Genel Rapor,20.01.2024,Tamamlandı\n' +
+                    '2,Employee,Çalışan Raporu,20.01.2024,Tamamlandı\n' +
+                    '3,Performance,Performans Raporu,20.01.2024,Tamamlandı\n' +
+                    '4,Financial,Finansal Rapor,20.01.2024,Tamamlandı';
+        link.download = `tum_raporlar_${new Date().toLocaleDateString('tr-TR').replace(/\./g, '-')}.csv`;
+        link.click();
+        
+        showToast('Tüm raporlar başarıyla indirildi', 'success');
+    }, 3000);
+}
+
+// Function to add new report to table
+function addReportToList(reportData) {
+    const reportsList = document.getElementById('reportsList');
+    if (!reportsList) return;
+    
+    // Eğer "Henüz rapor oluşturulmadı" mesajı varsa kaldır
+    const noReportsMessage = reportsList.querySelector('.text-center.text-muted');
+    if (noReportsMessage) {
+        noReportsMessage.remove();
+    }
+    
+    const reportItem = document.createElement('div');
+    reportItem.className = 'report-item';
+    reportItem.innerHTML = `
+        <div class="report-icon">
+            <i class="fas fa-file-alt"></i>
+        </div>
+        <div class="report-content">
+            <h6>${reportData.name}</h6>
+            <p>Oluşturulma: ${reportData.date}</p>
+            <p>Durum: <span class="badge bg-success">${reportData.status}</span></p>
+        </div>
+        <div class="report-actions">
+            <button class="btn btn-sm btn-outline-primary" onclick="viewReport(${reportData.id})">
+                <i class="fas fa-eye"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-success" onclick="downloadReport(${reportData.id})">
+                <i class="fas fa-download"></i>
+            </button>
+        </div>
+    `;
+    
+    reportsList.insertBefore(reportItem, reportsList.firstChild);
+}
+
+// Function to add report to recent reports table
+function addReportToRecentTable(reportData) {
+    const recentTable = document.querySelector('.table tbody');
+    if (!recentTable) return;
+    
+    // Rapor türüne göre badge rengi belirle
+    const typeBadges = {
+        'new-hires': 'bg-primary',
+        'turnover': 'bg-warning',
+        'training': 'bg-info',
+        'attendance': 'bg-success',
+        'leave-analysis': 'bg-secondary',
+        'salary-analysis': 'bg-danger',
+        'performance': 'bg-warning',
+        'financial': 'bg-success',
+        'employee': 'bg-primary',
+        'general': 'bg-info'
+    };
+    
+    const badgeClass = typeBadges[reportData.type] || 'bg-info';
+    const typeLabels = {
+        'new-hires': 'İşe Alım',
+        'turnover': 'İşten Ayrılma',
+        'training': 'Eğitim',
+        'attendance': 'Devam Takibi',
+        'leave-analysis': 'İzin Analizi',
+        'salary-analysis': 'Maaş Analizi',
+        'performance': 'Performans',
+        'financial': 'Finansal',
+        'employee': 'Çalışan',
+        'general': 'Genel'
+    };
+    
+    const typeLabel = typeLabels[reportData.type] || reportData.type;
+    
+    const newRow = document.createElement('tr');
+    newRow.innerHTML = `
+        <td>${reportData.name}</td>
+        <td><span class="badge ${badgeClass}">${typeLabel}</span></td>
+        <td>Admin User</td>
+        <td>${reportData.date}</td>
+        <td><span class="badge bg-success">${reportData.status}</span></td>
+        <td>
+            <button class="btn btn-sm btn-success" onclick="downloadReport(${reportData.id})">
+                <i class="fas fa-download"></i>
+            </button>
+            <button class="btn btn-sm btn-info" onclick="viewReport(${reportData.id})">
+                <i class="fas fa-eye"></i>
+            </button>
+        </td>
+    `;
+    
+    // Yeni raporu tablonun en üstüne ekle
+    recentTable.insertBefore(newRow, recentTable.firstChild);
+    
+    // Tabloda maksimum 10 satır olsun
+    const rows = recentTable.querySelectorAll('tr');
+    if (rows.length > 10) {
+        recentTable.removeChild(rows[rows.length - 1]);
+    }
 }
 </script>
 
